@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Terminal Backrooms</title>
+    <title>Terminal Of Backrooms</title>
     <style>
         * {
             margin: 0;
@@ -24,7 +24,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.9; /* Subtle background effect */
+            opacity: 0.9;
             z-index: 1;
         }
         
@@ -33,7 +33,7 @@
             z-index: 2;
             padding: 20px;
             min-height: 100vh;
-            background: rgba(0, 0, 0, 0.7); /* Slight dark overlay */
+            background: rgba(0, 0, 0, 0.7);
         }
         
         #terminal {
@@ -44,7 +44,7 @@
             border: 1px solid #00ff00;
             padding: 20px;
             margin-bottom: 20px;
-            background: rgba(0, 0, 0, 0.8); /* Slight transparency */
+            background: rgba(0, 0, 0, 0.8);
             box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
         }
         
@@ -70,7 +70,6 @@
             white-space: pre-wrap;
         }
 
-        /* Style for the scrollbar */
         #terminal::-webkit-scrollbar {
             width: 8px;
         }
@@ -84,12 +83,36 @@
             border-radius: 4px;
         }
 
-        /* Title style */
         .title {
             text-align: center;
             margin-bottom: 20px;
             font-size: 24px;
             text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        /* New styles for footer info */
+        .footer-info {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            font-family: monospace;
+        }
+
+        .footer-info a {
+            color: #00ff00;
+            text-decoration: none;
+        }
+
+        .footer-info a:hover {
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+        }
+
+        .info-line {
+            margin: 5px 0;
+            padding: 5px;
         }
     </style>
 </head>
@@ -106,6 +129,11 @@
         <form id="input-form" onsubmit="sendMessage(event)">
             <input type="text" id="user-input" placeholder="Enter your query..." autocomplete="off">
         </form>
+
+        <div class="footer-info">
+            <div class="info-line">$ GitHub: <a href="https://github.com/rustyResearch1/BackRoomIndex" target="_blank">https://github.com/rustyResearch1/BackRoomIndex</a></div>
+            <div class="info-line">$ CA: [incoming]</div>
+        </div>
     </div>
 
     <script>
@@ -113,7 +141,6 @@
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
 
-        // Set canvas size
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -121,13 +148,11 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        // Matrix rain characters
         const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
         const drops = [];
         const fontSize = 16;
         const columns = canvas.width / fontSize;
 
-        // Initialize drops
         for(let i = 0; i < columns; i++) {
             drops[i] = Math.random() * canvas.height/fontSize;
         }
@@ -162,11 +187,9 @@
             const message = input.value;
             if (!message) return;
 
-            // Add user message
             addMessage(`> ${message}`);
             input.value = '';
 
-            // Add loading indicator
             const loadingDiv = addMessage('$ Processing...');
 
             try {
@@ -178,7 +201,6 @@
                 
                 const data = await response.json();
                 
-                // Remove loading indicator and add response
                 loadingDiv.remove();
                 addMessage(data.response);
             } catch (error) {
