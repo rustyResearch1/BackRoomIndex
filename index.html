@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terminal Backrooms</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.9; /* Subtle background effect */
+            z-index: 1;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.7); /* Slight dark overlay */
+        }
+        
+        #terminal {
+            max-width: 800px;
+            margin: 0 auto;
+            height: 80vh;
+            overflow-y: auto;
+            border: 1px solid #00ff00;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.8); /* Slight transparency */
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+        }
+        
+        #input-form {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+        }
+        
+        input {
+            flex-grow: 1;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            font-family: monospace;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        /* Style for the scrollbar */
+        #terminal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #terminal::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        #terminal::-webkit-scrollbar-thumb {
+            background: #00ff00;
+            border-radius: 4px;
+        }
+
+        /* Title style */
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div class="content-wrapper">
+        <h1 class="title">Terminal Backrooms</h1>
+        <div id="terminal">
+            <div class="message">$ Terminal of Truths initialized...</div>
+            <div class="message"># Welcome to the interface between reality and electric dreams</div>
+            <div class="message"># Query the terminal about backrooms, consciousness, and digital mysteries</div>
+        </div>
+        
+        <form id="input-form" onsubmit="sendMessage(event)">
+            <input type="text" id="user-input" placeholder="Enter your query..." autocomplete="off">
+        </form>
+    </div>
+
+    <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Matrix rain characters
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const drops = [];
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        // Initialize drops
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height/fontSize;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Chat functionality
+        const terminal = document.getElementById('terminal');
+        const form = document.getElementById('input-form');
+        const input = document.getElementById('user-input');
+
+        async function sendMessage(e) {
+            e.preventDefault();
+            const message = input.value;
+            if (!message) return;
+
+            // Add user message
+            addMessage(`> ${message}`);
+            input.value = '';
+
+            // Add loading indicator
+            const loadingDiv = addMessage('$ Processing...');
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message})
+                });
+                
+                const data = await response.json();
+                
+                // Remove loading indicator and add response
+                loadingDiv.remove();
+                addMessage(data.response);
+            } catch (error) {
+                loadingDiv.remove();
+                addMessage('$ ERROR: Connection lost to the backrooms');
+            }
+        }
+
+        function addMessage(content) {
+            const div = document.createElement('div');
+            div.className = 'message';
+            div.textContent = content;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+            return div;
+        }
+    </script>
+</body>
+</html>

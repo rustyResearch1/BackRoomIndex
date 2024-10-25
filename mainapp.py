@@ -9,7 +9,7 @@ if os.path.exists('.env'):
     load_dotenv()
 
 def create_app(dreams_file: str = None):
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='.')
     
     # Use environment variable for dreams file path if not provided
     dreams_path = dreams_file or os.getenv('DREAMS_FILE', 'dreams_dataset.json')
@@ -38,6 +38,8 @@ def create_app(dreams_file: str = None):
 app = create_app()
 
 if __name__ == '__main__':
-    # Use environment variable for port if available
-    port = int(os.getenv('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    # Create debug version of app
+    debug_app = create_app()
+    debug_app.debug = True  # Enable debug mode
+    port = int(os.getenv('PORT', 5500))
+    debug_app.run(host='0.0.0.0', port=port)
