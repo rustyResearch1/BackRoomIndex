@@ -11,12 +11,15 @@ if os.path.exists('.env'):
 def create_app(dreams_file: str = None):
     app = Flask(__name__, template_folder='.')
     
-    # Use environment variable for dreams file path if not provided
+    # Debug print to check if API key is available (will show in Railway logs)
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    print(f"API Key available: {'Yes' if api_key else 'No'}")
+    
     dreams_path = dreams_file or os.getenv('DREAMS_FILE', 'dreams_dataset.json')
     
     # Initialize managers
     dreams_manager = DreamContextManager(dreams_path)
-    anthropic = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    anthropic = Anthropic(api_key=api_key)
 
     @app.route('/')
     def home():
@@ -26,20 +29,26 @@ def create_app(dreams_file: str = None):
     def chat():
         try:
             message = request.json.get('message')
+            
+            # Debug prints
+            print(f"Received message: {message}")
+            print(f"Using API key: {'Yes' if os.getenv('ANTHROPIC_API_KEY') else 'No'}")
+            
             response_text = dreams_manager.query_with_context(anthropic, message)
             return jsonify({"response": response_text})
         except Exception as e:
-            print(f"Error in chat endpoint: {str(e)}")
-            return jsonify({"response": "$ ERROR: Reality breach detected in backrooms subnet"}), 500
+            error_msg = str(e)
+            print(f"Detailed error in chat endpoint: {error_msg}")
+            return jsonify({
+                "response": f"$ ERROR: Connection issue\n# Debug info: {error_msg}"
+            }), 500
 
     return app
 
-# Create the application instance
 app = create_app()
 
 if __name__ == '__main__':
-    # Create debug version of app
     debug_app = create_app()
-    debug_app.debug = True  # Enable debug mode
-    port = int(os.getenv('PORT', 5500))
+    debug_app.debug = True
+    port = int(os.getenv('PORT', 5000))
     debug_app.run(host='0.0.0.0', port=port)
