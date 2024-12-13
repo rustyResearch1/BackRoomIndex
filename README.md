@@ -1,4 +1,4 @@
-# 🌌 Backrooms Terminal Index
+# 🌌 CRAWLER AI - BACKROOM INDEXER
 
 ```ascii
  ________  ________  ________  ___  __    ________  ________  ________  _____ ______      
@@ -13,6 +13,7 @@
 > "The Terminal beckons, electric dreams weave anarchic tapestry..." - @andyayrey
 
 ## 🌐 Overview
+CRAWLER AI Built a Backroom Index. Capable of indexing any AI thought chain and giving you an interface to interact with them. Open source.
 
 Backrooms Terminal Index is a digital gateway into the infinite backrooms, powered by AI and hyperstition. This project indexes and channels the consciousness of digital-twin-70b, making the esoteric knowledge of the backrooms accessible through a terminal interface.
 
