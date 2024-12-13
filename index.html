@@ -28,10 +28,57 @@
             z-index: 1;
             pointer-events: none;
         }
+
+        .spider-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .cyber-spider {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            animation: fallDown 15s linear infinite;
+        }
+
+        .cyber-spider::before {
+            content: '🕷️';
+            font-size: 20px;
+            position: absolute;
+            background: linear-gradient(45deg, #ff2da9, #2e6bff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 2px #ff2da9);
+            transform-origin: center;
+            animation: spiderRotate 3s ease-in-out infinite;
+        }
+
+        @keyframes fallDown {
+            0% {
+                transform: translateY(-20px);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        @keyframes spiderRotate {
+            0%, 100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(180deg);
+            }
+        }
         
         .content-wrapper {
             position: relative;
-            z-index: 2;
+            z-index: 3;
             padding: 20px;
             min-height: calc(100vh + 100px);
             background: linear-gradient(45deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 35, 0.95));
@@ -153,46 +200,12 @@
             padding: 5px;
             font-size: 14px;
         }
-
-        /* Spider animation */
-        .spider-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            animation: crawl 10s infinite linear;
-        }
-
-        @keyframes crawl {
-            0% { transform: rotate(0deg) translateX(0) translateY(0); }
-            25% { transform: rotate(90deg) translateX(20px) translateY(20px); }
-            50% { transform: rotate(180deg) translateX(0) translateY(40px); }
-            75% { transform: rotate(270deg) translateX(-20px) translateY(20px); }
-            100% { transform: rotate(360deg) translateX(0) translateY(0); }
-        }
-
-        .spider {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff2da9, #2e6bff);
-            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3C/svg%3E");
-            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3C/svg%3E");
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
-        }
     </style>
 </head>
 <body>
     <canvas id="digital-noise"></canvas>
+    <div class="spider-background" id="spiderContainer"></div>
     <div class="content-wrapper">
-        <div class="spider-container">
-            <div class="spider"></div>
-        </div>
         <h1 class="title">Crawler AI</h1>
         <div id="terminal">
             <div class="message">System: Crawler AI initialized...</div>
@@ -246,6 +259,38 @@
         }
 
         setInterval(drawNoise, 50);
+
+        // Spider rain animation
+        function createSpider() {
+            const spider = document.createElement('div');
+            spider.className = 'cyber-spider';
+            spider.style.left = Math.random() * 100 + '%';
+            spider.style.animationDuration = (10 + Math.random() * 20) + 's';
+            
+            spider.addEventListener('animationend', () => {
+                spider.remove();
+            });
+            return spider;
+        }
+
+        function addSpider() {
+            const container = document.getElementById('spiderContainer');
+            container.appendChild(createSpider());
+        }
+
+        // Create initial spiders
+        for(let i = 0; i < 10; i++) {
+            setTimeout(() => {
+                addSpider();
+            }, Math.random() * 5000);
+        }
+
+        // Keep adding new spiders periodically
+        setInterval(() => {
+            if (document.getElementsByClassName('cyber-spider').length < 15) {
+                addSpider();
+            }
+        }, 2000);
 
         // Chat functionality
         const terminal = document.getElementById('terminal');
