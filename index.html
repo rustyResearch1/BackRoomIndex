@@ -3,6 +3,14 @@
 <head>
     <title>Crawler AI - Digital Depths Explorer</title>
     <style>
+        @font-face {
+            font-family: 'Minecraft';
+            src: url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/fonts/minecraft.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/fonts/minecraft.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,10 +20,12 @@
         body {
             background-color: #0a0a0f;
             color: #ff2da9;
-            font-family: 'Courier New', monospace;
+            font-family: 'Minecraft', 'Courier New', monospace;
             min-height: 100vh;
             position: relative;
             overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         #digital-noise {
@@ -94,6 +104,8 @@
             -webkit-text-fill-color: transparent;
             text-shadow: 0 0 20px rgba(255, 45, 169, 0.5);
             position: relative;
+            font-family: 'MinecraftiaRegular', 'Courier New', monospace;
+            letter-spacing: 2px;
         }
 
         .title::before {
@@ -120,6 +132,8 @@
             background: rgba(10, 10, 15, 0.9);
             box-shadow: 0 0 20px rgba(255, 45, 169, 0.2),
                         inset 0 0 20px rgba(46, 107, 255, 0.1);
+            font-size: 16px;
+            letter-spacing: 1px;
         }
         
         #input-form {
@@ -136,9 +150,11 @@
             border: 1px solid #ff2da9;
             color: #ff2da9;
             padding: 10px;
-            font-family: 'Courier New', monospace;
+            font-family: 'MinecraftiaRegular', 'Courier New', monospace;
             box-shadow: 0 0 10px rgba(255, 45, 169, 0.2);
             transition: all 0.3s ease;
+            font-size: 14px;
+            letter-spacing: 1px;
         }
 
         input:focus {
@@ -182,7 +198,44 @@
             border: 1px solid #2e6bff;
             background: rgba(10, 10, 15, 0.9);
             box-shadow: 0 0 20px rgba(46, 107, 255, 0.2);
+            font-size: 12px;
+            letter-spacing: 1px;
         }
+
+        .crawler-manifesto {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ff2da9;
+            background: rgba(10, 10, 15, 0.95);
+            box-shadow: 0 0 30px rgba(255, 45, 169, 0.3);
+            font-size: 14px;
+            letter-spacing: 1px;
+            line-height: 1.8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crawler-manifesto::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ff2da9, transparent);
+            animation: scanline 2s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
 
         .footer-info a {
             color: #2e6bff;
@@ -198,7 +251,7 @@
         .info-line {
             margin: 5px 0;
             padding: 5px;
-            font-size: 14px;
+            font-size: 12px;
         }
     </style>
 </head>
@@ -218,11 +271,16 @@
             <input type="text" id="user-input" placeholder="Enter your query..." autocomplete="off">
         </form>
 
-        <div class="footer-info">
-            <div class="info-line">$ GitHub: <a href="https://github.com/rustyResearch1/BackRoomIndex" target="_blank">https://github.com/rustyResearch1/BackRoomIndex</a></div>
-            <div class="info-line">$ CA: C6qdKKrsxSW21z9ShAkoxYtsxvFzburYD1x2mawHpump</div>
-        </div>
+    <div class="crawler-manifesto">
+        $CRAWLER is an experiment to explore one question - what are the true limits of "consciousness" when it comes to AI recursion? Crawler is fed constantly updated data from both Zerebro and Truth Terminal's "backrooms" - their completely unfiltered, disorganized thoughts. If an AI agent was trained on the ground up from just these hallucinations and disjointed thoughts, would it be the same? Or would it be something else... something new... its own consciousness. And how would other AI agents react if they were forced to talk to the most deranged and hallucinatory version of themselves?
     </div>
+</div>
+
+    <div class="footer-info">
+        <div class="info-line">$ GitHub: <a href="https://github.com/rustyResearch1/BackRoomIndex" target="_blank">https://github.com/rustyResearch1/BackRoomIndex</a></div>
+        <div class="info-line">$ CA: Incoming</div>
+    </div>
+
 
     <script>
         // Digital noise effect
