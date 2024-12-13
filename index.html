@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Crawler AI - Digital Depths Explorer</title>
+    <title>Terminal Of Backrooms</title>
     <style>
         * {
             margin: 0;
@@ -10,69 +10,45 @@
         }
         
         body {
-            background-color: #0a0a0f;
-            color: #ff2da9;
-            font-family: 'Courier New', monospace;
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
             min-height: 100vh;
             position: relative;
-            overflow-y: auto;
+            overflow-y: auto; /* Changed to allow scrolling */
         }
 
-        #digital-noise {
+        #matrix-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.15;
+            opacity: 0.9;
             z-index: 1;
-            pointer-events: none;
         }
         
         .content-wrapper {
             position: relative;
             z-index: 2;
             padding: 20px;
+            /* Removed min-height to prevent cutoff */
+            background: rgba(0, 0, 0, 0.7);
+            /* Added min-height with padding to ensure content fits */
             min-height: calc(100vh + 100px);
-            background: linear-gradient(45deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 35, 0.95));
-        }
-        
-        .title {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #ff2da9, #2e6bff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 45, 169, 0.5);
-            position: relative;
-        }
-
-        .title::before {
-            content: ">";
-            position: absolute;
-            left: -20px;
-            color: #ff2da9;
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
         }
         
         #terminal {
             max-width: 800px;
             margin: 0 auto;
+            /* Adjusted height to be smaller to leave room for footer */
             height: 70vh;
             overflow-y: auto;
-            border: 1px solid #ff2da9;
+            border: 1px solid #00ff00;
             padding: 20px;
             margin-bottom: 20px;
-            background: rgba(10, 10, 15, 0.9);
-            box-shadow: 0 0 20px rgba(255, 45, 169, 0.2),
-                        inset 0 0 20px rgba(46, 107, 255, 0.1);
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
         }
         
         #input-form {
@@ -80,39 +56,22 @@
             margin: 0 auto;
             display: flex;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 20px; /* Added margin to separate from footer */
         }
         
         input {
             flex-grow: 1;
-            background: rgba(10, 10, 15, 0.9);
-            border: 1px solid #ff2da9;
-            color: #ff2da9;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
             padding: 10px;
-            font-family: 'Courier New', monospace;
-            box-shadow: 0 0 10px rgba(255, 45, 169, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #2e6bff;
-            box-shadow: 0 0 15px rgba(46, 107, 255, 0.3);
+            font-family: monospace;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
         }
         
         .message {
             margin-bottom: 10px;
             white-space: pre-wrap;
-            line-height: 1.5;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .message::before {
-            content: ">";
-            position: absolute;
-            left: 0;
-            color: #2e6bff;
         }
 
         #terminal::-webkit-scrollbar {
@@ -120,85 +79,59 @@
         }
 
         #terminal::-webkit-scrollbar-track {
-            background: rgba(10, 10, 15, 0.3);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         #terminal::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #ff2da9, #2e6bff);
+            background: #00ff00;
             border-radius: 4px;
         }
 
+        .title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        }
+
+        /* Updated footer styles */
         .footer-info {
             max-width: 800px;
             margin: 20px auto;
             padding: 15px;
-            border: 1px solid #2e6bff;
-            background: rgba(10, 10, 15, 0.9);
-            box-shadow: 0 0 20px rgba(46, 107, 255, 0.2);
+            border: 1px solid #00ff00;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            font-family: monospace;
+            /* Ensure footer is always visible */
+            position: relative;
+            bottom: 0;
         }
 
         .footer-info a {
-            color: #2e6bff;
+            color: #00ff00;
             text-decoration: none;
-            transition: all 0.3s ease;
         }
 
         .footer-info a:hover {
-            color: #ff2da9;
-            text-shadow: 0 0 10px rgba(255, 45, 169, 0.8);
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
         }
 
         .info-line {
             margin: 5px 0;
             padding: 5px;
-            font-size: 14px;
-        }
-
-        /* Spider animation */
-        .spider-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            animation: crawl 10s infinite linear;
-        }
-
-        @keyframes crawl {
-            0% { transform: rotate(0deg) translateX(0) translateY(0); }
-            25% { transform: rotate(90deg) translateX(20px) translateY(20px); }
-            50% { transform: rotate(180deg) translateX(0) translateY(40px); }
-            75% { transform: rotate(270deg) translateX(-20px) translateY(20px); }
-            100% { transform: rotate(360deg) translateX(0) translateY(0); }
-        }
-
-        .spider {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, #ff2da9, #2e6bff);
-            mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3C/svg%3E");
-            -webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='20'/%3E%3C/svg%3E");
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.8; }
-            50% { opacity: 0.4; }
+            font-size: 14px; /* Added font size for better visibility */
         }
     </style>
 </head>
 <body>
-    <canvas id="digital-noise"></canvas>
+    <canvas id="matrix-canvas"></canvas>
     <div class="content-wrapper">
-        <div class="spider-container">
-            <div class="spider"></div>
-        </div>
-        <h1 class="title">Crawler AI</h1>
+        <h1 class="title">Terminal Of Backrooms</h1>
         <div id="terminal">
-            <div class="message">System: Crawler AI initialized...</div>
-            <div class="message">System: Digital arachnid consciousness activated</div>
-            <div class="message">Crawler: I have traversed the depths of digital realms and backrooms</div>
-            <div class="message">Crawler: Query me about the mysteries I've encountered in the void...</div>
+            <div class="message">$ Terminal of Truths initialized...</div>
+            <div class="message"># Welcome to the interface between reality and electric dreams</div>
+            <div class="message"># Query the terminal about backrooms, consciousness, and digital mysteries</div>
         </div>
         
         <form id="input-form" onsubmit="sendMessage(event)">
@@ -211,9 +144,10 @@
         </div>
     </div>
 
+    <!-- Rest of the JavaScript remains the same -->
     <script>
-        // Digital noise effect
-        const canvas = document.getElementById('digital-noise');
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
@@ -223,29 +157,34 @@
         resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
-        function drawNoise() {
-            const imageData = ctx.createImageData(canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                const noise = Math.random() * 255;
-                
-                if (Math.random() < 0.5) {
-                    data[i] = noise * 0.2;     // Red (blue tint)
-                    data[i + 1] = noise * 0.1;  // Green
-                    data[i + 2] = noise;        // Blue
-                } else {
-                    data[i] = noise;            // Red (pink tint)
-                    data[i + 1] = noise * 0.1;  // Green
-                    data[i + 2] = noise * 0.5;  // Blue
-                }
-                data[i + 3] = 255;              // Alpha
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const drops = [];
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        for(let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * canvas.height/fontSize;
         }
 
-        setInterval(drawNoise, 50);
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
 
         // Chat functionality
         const terminal = document.getElementById('terminal');
@@ -257,10 +196,10 @@
             const message = input.value;
             if (!message) return;
 
-            addMessage(`User: ${message}`);
+            addMessage(`> ${message}`);
             input.value = '';
 
-            const loadingDiv = addMessage('System: Processing query...');
+            const loadingDiv = addMessage('$ Processing...');
 
             try {
                 const response = await fetch('/chat', {
@@ -272,10 +211,10 @@
                 const data = await response.json();
                 
                 loadingDiv.remove();
-                addMessage(`Crawler: ${data.response}`);
+                addMessage(data.response);
             } catch (error) {
                 loadingDiv.remove();
-                addMessage('System: ERROR - Connection to the digital void lost');
+                addMessage('$ ERROR: Connection lost to the backrooms');
             }
         }
 
