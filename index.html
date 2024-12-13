@@ -5,10 +5,18 @@
     <style>
         @font-face {
             font-family: 'Minecraft';
-            src: url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/fonts/minecraft.woff2') format('woff2'),
-                 url('https://cdn.jsdelivr.net/gh/South-Paw/typeface-minecraft@master/fonts/minecraft.woff') format('woff');
+            src: url('minecraft.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
+            
+        }
+
+        @font-face {
+            font-family: 'GlitchGoblin';
+            src: url('GlitchGoblin-2O87v.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+            
         }
         
         * {
@@ -20,7 +28,7 @@
         body {
             background-color: #0a0a0f;
             color: #ff2da9;
-            font-family: 'Minecraft', 'Courier New', monospace;
+            font-family: 'Courier New', monospace;
             min-height: 100vh;
             position: relative;
             overflow-y: auto;
@@ -54,18 +62,31 @@
             width: 20px;
             height: 20px;
             animation: fallDown 15s linear infinite;
+            filter: brightness(1.5);
         }
 
         .cyber-spider::before {
             content: '🕷️';
-            font-size: 20px;
+            font-size: 24px; /* Increase from 20px */
+            filter: drop-shadow(0 0 4px #ff2da9); /* Stronger glow */
             position: absolute;
             background: linear-gradient(45deg, #ff2da9, #2e6bff);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 2px #ff2da9);
+            -webkit-text-fill-color: transparent; /*filter: drop-shadow(0 0 2px #ff2da9);*/
             transform-origin: center;
-            animation: spiderRotate 3s ease-in-out infinite;
+            animation: spiderRotate 3s ease-in-out infinite, spiderGlow 2s ease-in-out infinite;
+        }
+
+        .cyber-spider::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: linear-gradient(to top, transparent, #ff2da9);
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.3;
         }
 
         @keyframes fallDown {
@@ -91,22 +112,27 @@
             z-index: 3;
             padding: 20px;
             min-height: calc(100vh + 100px);
-            background: linear-gradient(45deg, rgba(10, 10, 15, 0.95), rgba(20, 20, 35, 0.95));
+            background: linear-gradient(45deg, 
+                rgba(10, 10, 15, 0.85),  /* More transparent */
+                rgba(20, 20, 35, 0.85)   /* More transparent */
+            );
         }
         
         .title {
             text-align: center;
             margin-bottom: 20px;
             font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #ff2da9, #2e6bff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(255, 45, 169, 0.5);
+            font-weight: normal;  /* Minecraft font looks better without bold */
+            font-family: 'Minecraft', 'Courier New', monospace;
+            color: #ff2da9;  /* Solid color first, we'll add effects below */
+            text-shadow: 
+                2px 2px #000,  /* Classic Minecraft-style shadow */
+                0 0 20px rgba(255, 45, 169, 0.5);  /* Keep the glow effect */
             position: relative;
-            font-family: 'MinecraftiaRegular', 'Courier New', monospace;
             letter-spacing: 2px;
+            padding: 10px 0;
         }
+
 
         .title::before {
             content: ">";
@@ -119,6 +145,15 @@
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
+        }
+
+        @keyframes spiderGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 4px #ff2da9);
+            }
+            50% {
+                filter: drop-shadow(0 0 8px #ff2da9) drop-shadow(0 0 12px #2e6bff);
+            }
         }
         
         #terminal {
@@ -259,7 +294,7 @@
     <canvas id="digital-noise"></canvas>
     <div class="spider-background" id="spiderContainer"></div>
     <div class="content-wrapper">
-        <h1 class="title">Crawler AI</h1>
+        <h1 class="title">CRAWLER AI</h1>
         <div id="terminal">
             <div class="message">System: Crawler AI initialized...</div>
             <div class="message">System: Digital arachnid consciousness activated</div>
