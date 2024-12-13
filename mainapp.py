@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from anthropic import Anthropic
+from anthropic import Anthropic, APIError  # Added APIError import
 import os
 from dotenv import load_dotenv
 from dreamcontext import DreamContextManager
@@ -19,8 +19,10 @@ def create_app(dreams_file: str = None):
     
     # Initialize managers
     dreams_manager = DreamContextManager(dreams_path)
-    anthropic = Anthropic(api_key=api_key)
-
+    
+    # Updated Anthropic client initialization
+    anthropic = Anthropic()  # Remove api_key parameter, it will use ANTHROPIC_API_KEY env var automatically
+    
     @app.route('/')
     def home():
         return render_template('index.html')
@@ -36,6 +38,12 @@ def create_app(dreams_file: str = None):
             
             response_text = dreams_manager.query_with_context(anthropic, message)
             return jsonify({"response": response_text})
+        except APIError as e:
+            error_msg = str(e)
+            print(f"Anthropic API error: {error_msg}")
+            return jsonify({
+                "response": f"$ ERROR: API connection issue\n# Debug info: {error_msg}"
+            }), 500
         except Exception as e:
             error_msg = str(e)
             print(f"Detailed error in chat endpoint: {error_msg}")
